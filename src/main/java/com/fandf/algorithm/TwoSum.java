@@ -74,7 +74,8 @@ public class TwoSum {
     private static int[] twoSum1(int[] nums, int target) {
         //双层for循环遍历 时间复杂度 O(n的平方)
         for (int i = 0; i < nums.length; i++) {
-            for (int j = i; j < nums.length; j++) {
+            //数组中同一个元素在答案里不能重复出现
+            for (int j = i + 1; j < nums.length; j++) {
                 //两数之和为target
                 if (nums[j] + nums[i] == target) {
                     return new int[]{i, j};
