@@ -56,13 +56,17 @@ public class ThreeSum {
         int[] nums = new int[]{-1, 0, 1, 2, -1, -4};
         //暴力法
         List<List<Integer>> result1 = threeSum1(nums);
-        System.out.println(result1);
+        System.out.println("result1 = " + result1);
+        //双指针法
+        List<List<Integer>> result2 = threeSum2(nums);
+        System.out.println("result2 = " + result2);
 
 
     }
 
     /**
      * 遍历三次
+     * 时间复杂度O(n^3)
      *
      * @param nums 数组
      * @return 返回所有和为 0 且不重复的三元组。
@@ -105,6 +109,65 @@ public class ThreeSum {
             }
         }
         return distinctList;
+    }
+
+    /**
+     * 双指针法
+     * 时间复杂度O(n^2)
+     *
+     * @param nums 数组
+     * @return 返回所有和为 0 且不重复的三元组。
+     */
+    private static List<List<Integer>> threeSum2(int[] nums) {
+        //结果数组
+        List<List<Integer>> result = new ArrayList<>();
+        //1.先排序,默认升序
+        Arrays.sort(nums);
+
+        int length = nums.length;
+        //2.遍历数组
+        for (int i = 0; i < length; i++) {
+            //如果当前数(最小数)已经大于0，直接退出循环
+            if (nums[i] > 0) {
+                break;
+            }
+            //如果当前数已经出现过，直接跳过，也不用去重了
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            //3.以i之后的最小数，定义为左指针
+            int lp = i + 1;
+            //3.以最后一个数(最大数)，定义为右指针
+            int rp = length - 1;
+            //只要左右指针不重叠，就继续移动指针
+            while (lp < rp) {
+                //4.当前数和左右指针的和
+                int sum = nums[i] + nums[lp] + nums[rp];
+                //判断sum，与0做大小对比
+                if (sum == 0) {
+                    //5.找到了一组解
+                    result.add(Arrays.asList(nums[i], nums[lp], nums[rp]));
+                    //直接移动左右指针
+                    lp++;
+                    rp--;
+                    //如果左指针移动之后元素相同，直接跳过
+                    while (lp < rp && nums[lp] == nums[lp - 1]) {
+                        lp++;
+                    }
+                    //如果右指针移动之后元素相同，直接跳过
+                    while (lp < rp && nums[rp] == nums[rp + 1]) {
+                        rp--;
+                    }
+                } else if (sum < 0) {
+                    //6.小于0，左右指针中的较小数增大，即左指针右移
+                    lp++;
+                } else {
+                    //7.sum > 0, 左右指针中的较大数减少，即右指针左移
+                    rp--;
+                }
+            }
+        }
+        return result;
     }
 
 }
