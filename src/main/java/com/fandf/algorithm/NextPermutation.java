@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * @author fandongfeng
@@ -58,7 +57,14 @@ public class NextPermutation {
 
         //暴力法，所有组合全部列出来,然后按升序排序，查找当前元素的下一个位置元素。
         Integer result1 = nextPermutation1(nums);
-        System.out.println(result1);
+        String resultStr = result1.toString();
+        int[] resultArray = new int[resultStr.length()];
+        for (int i = 0; i < resultStr.length(); i++) {
+            // 遍历str将每一位数字添加如intArray
+            Character ch = resultStr.charAt(i);
+            resultArray[i] = Integer.parseInt(ch.toString());
+        }
+        System.out.println(Arrays.toString(resultArray));
 
         //排序法
         int[] nums2 = new int[]{3, 1, 1};
@@ -70,15 +76,17 @@ public class NextPermutation {
     /**
      * 1. 先排除例外，如果数组是按照降序排列的，就没有升序的子序列了。 下一个排列就是将数组升序排列 比如{9,8,7}，下一个排列就是[7,8,9]
      * 2. 如果数组有一个升序的子序列，那么就一定可以找到它的下一个排列。 也就是说从右往左，找到第一对连续的数字 nums[i] 和 nums[i+1],满足nums[i+1] > nums[i]
-     * 比如 [1,5,7,4,2]   满足 nums[i+1] > nums[i] 则 i = 1, (num[2] = 7) > (num[1] = 5), 然后 从i+1到 数组结束，查找比5大，比7小的数字，
-     * 找到了6 , 那么就确定了前两个数字1,6 ， 后面的按正序排序就行了
-     * 如果没找到，则直接替换5和7的位置即可
+     *  2.1比如 [1,5,7,4,2]   满足 nums[i+1] > nums[i] 则 i = 1, (num[2] = 7) > (num[1] = 5), 然后 从i+1到 数组结束，查找比5大，比7小的数字，
+     *  2.2找到了6 , 那么就确定了前两个数字1,6 ， 后面的按正序排序就行了
+     *  2.3如果没找到，则直接替换5和7的位置即可
      *
      * @param nums 数组
      * @return 下一个排列数
      */
     private static void nextPermutation2(int[] nums) {
+        //从倒数第二个开始找
         int k = nums.length - 2;
+        //2.找出第一对连续的数字
         while (k >= 0 && nums[k] >= nums[k + 1]) {
             k--;
         }
@@ -88,6 +96,7 @@ public class NextPermutation {
             return;
         }
 
+        //2.1开始往后找
         int i = k + 2;
         while (i < nums.length && nums[i] > nums[k]) {
             i++;
@@ -108,25 +117,10 @@ public class NextPermutation {
         }
     }
 
-    /**
-     * 数组转数字
-     *
-     * @param arr 数组 example {1,3, 1}
-     * @return 转换后的数字 131
-     */
-    public static Integer transfer(int[] arr) {
-        String str = "";
-        for (int i = 0; i < arr.length; i++) {
-            String s;
-            int z = arr[i];
-            s = Integer.toString(z);
-            str = str.concat(s);
-        }
-        return Integer.valueOf(str);
-    }
+
 
     /**
-     * 下一个排列
+     * 下一个排列的int
      * 时间复杂度：O(n!)，可能的排列总计有 n! 个。
      *
      * @param nums 数组
@@ -183,6 +177,23 @@ public class NextPermutation {
             track.removeLast();
             used[i] = false;
         }
+    }
+
+    /**
+     * 数组转数字
+     *
+     * @param arr 数组 example {1,3, 1}
+     * @return 转换后的数字 131
+     */
+    public static Integer transfer(int[] arr) {
+        String str = "";
+        for (int i = 0; i < arr.length; i++) {
+            String s;
+            int z = arr[i];
+            s = Integer.toString(z);
+            str = str.concat(s);
+        }
+        return Integer.valueOf(str);
     }
 
 }
